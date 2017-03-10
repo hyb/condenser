@@ -51,7 +51,7 @@ function* confirmEmailHandler() {
     if (eid.verified) {
         this.session.user = eid.user_id; // session recovery (user changed browsers)
         this.flash = { success: "Email has already been verified" };
-        this.redirect("/enter_mobile");
+        this.redirect("/create_account");
         return;
     }
     const hours_ago = (Date.now() - eid.updated_at) / 1000.0 / 3600.0;
@@ -67,17 +67,19 @@ function* confirmEmailHandler() {
         where: { id: eid.user_id }
     });
 
+    this.redirect("/create_account");
+
     // check if the phone is confirmed then redirect to create account - this is useful when we invite users and send them the link
-    const mid = yield models.Identity.findOne({
-        attributes: ["verified"],
-        where: { user_id: eid.user_id, provider: "phone" },
-        order: "id DESC"
-    });
-    if (mid && mid.verified) {
-        this.redirect("/create_account");
-    } else {
-        this.redirect("/enter_mobile");
-    }
+    // const mid = yield models.Identity.findOne({
+    //     attributes: ["verified"],
+    //     where: { user_id: eid.user_id, provider: "phone" },
+    //     order: "id DESC"
+    // });
+    // if (mid && mid.verified) {
+    //     this.redirect("/create_account");
+    // } else {
+    //     this.redirect("/enter_mobile");
+    // }
 }
 
 export default function useEnterAndConfirmEmailPages(app) {
@@ -96,7 +98,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             <div className="App">
                 <MiniHeader />
                 <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
+                    steps={["email", "steem account", "phone"]}
                     current={1}
                 />
                 <br />
@@ -291,7 +293,7 @@ export default function useEnterAndConfirmEmailPages(app) {
             <div className="App">
                 <MiniHeader />
                 <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
+                    steps={["email", "steem account", "phone"]}
                     current={1}
                 />
                 <br />

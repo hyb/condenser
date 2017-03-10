@@ -143,7 +143,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             <div className="App">
                 <MiniHeader />
                 <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
+                    steps={["email", "steem account", "phone"]}
                     current={2}
                 />
                 <br />
@@ -338,7 +338,7 @@ export default function useEnterAndConfirmMobilePages(app) {
             <div className="App">
                 <MiniHeader />
                 <SignupProgressBar
-                    steps={["email", "phone", "steem account"]}
+                    steps={["email", "steem account", "phone"]}
                     current={2}
                 />
                 <br />

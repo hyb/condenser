@@ -49,57 +49,60 @@ class CreateAccount extends React.Component {
         const {name, password, password_valid} = this.state;
         if (!name || !password || !password_valid) return;
 
-        let public_keys;
-        try {
-            const pk = PrivateKey.fromWif(password);
-            public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
-        } catch (error) {
-            public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
-                const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
-                return pk.toPublicKey().toString();
-            });
-        }
+        // redirect to phone verification
+        window.location = "/enter_mobile";
 
-        // createAccount
-        fetch('/api/v1/accounts', {
-            method: 'post',
-            mode: 'no-cors',
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                csrf: $STM_csrf,
-                name,
-                owner_key: public_keys[0],
-                active_key: public_keys[1],
-                posting_key: public_keys[2],
-                memo_key: public_keys[3]
-            })
-        }).then(r => r.json()).then(res => {
-            if (res.error || res.status !== 'ok') {
-                console.error('CreateAccount server error', res.error);
-                if (res.error === 'Unauthorized') {
-                    window.location = '/enter_email';
-                }
-                this.setState({server_error: res.error || 'Unknown', loading: false});
-            } else {
-                window.location = `/login.html#account=${name}&msg=accountcreated`;
-                // this.props.loginUser(name, password);
-                // const redirect_page = localStorage.getItem('redirect');
-                // if (redirect_page) {
-                //     localStorage.removeItem('redirect');
-                //     browserHistory.push(redirect_page);
-                // }
-                // else {
-                //     browserHistory.push('/@' + name);
-                // }
-            }
-        }).catch(error => {
-            console.error('Caught CreateAccount server error', error);
-            this.setState({server_error: (error.message ? error.message : error), loading: false});
-        });
+        let public_keys;
+        // try {
+        //     const pk = PrivateKey.fromWif(password);
+        //     public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
+        // } catch (error) {
+        //     public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
+        //         const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
+        //         return pk.toPublicKey().toString();
+        //     });
+        // }
+        //
+        // // createAccount
+        // fetch('/api/v1/accounts', {
+        //     method: 'post',
+        //     mode: 'no-cors',
+        //     credentials: 'same-origin',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         csrf: $STM_csrf,
+        //         name,
+        //         owner_key: public_keys[0],
+        //         active_key: public_keys[1],
+        //         posting_key: public_keys[2],
+        //         memo_key: public_keys[3]
+        //     })
+        // }).then(r => r.json()).then(res => {
+        //     if (res.error || res.status !== 'ok') {
+        //         console.error('CreateAccount server error', res.error);
+        //         if (res.error === 'Unauthorized') {
+        //             window.location = '/enter_email';
+        //         }
+        //         this.setState({server_error: res.error || 'Unknown', loading: false});
+        //     } else {
+        //         window.location = `/login.html#account=${name}&msg=accountcreated`;
+        //         // this.props.loginUser(name, password);
+        //         // const redirect_page = localStorage.getItem('redirect');
+        //         // if (redirect_page) {
+        //         //     localStorage.removeItem('redirect');
+        //         //     browserHistory.push(redirect_page);
+        //         // }
+        //         // else {
+        //         //     browserHistory.push('/@' + name);
+        //         // }
+        //     }
+        // }).catch(error => {
+        //     console.error('Caught CreateAccount server error', error);
+        //     this.setState({server_error: (error.message ? error.message : error), loading: false});
+        // });
     }
 
     onPasswordChange(password, password_valid) {
@@ -225,7 +228,7 @@ class CreateAccount extends React.Component {
 
         return (
             <div>
-                <SignupProgressBar steps={['email', 'phone', 'steem account']} current={3} />
+                <SignupProgressBar steps={['email', 'steem account', 'phone']} current={3} />
                 <div className="CreateAccount row">
                     <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <br />
