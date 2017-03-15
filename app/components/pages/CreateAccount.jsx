@@ -45,12 +45,20 @@ class CreateAccount extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.setState({server_error: '', loading: true});
+        // this.setState({server_error: '', loading: true});
         const {name, password, password_valid} = this.state;
-        if (!name || !password || !password_valid) return;
+        if (!name) return;
 
-        // redirect to phone verification
-        window.location = "/enter_mobile";
+        debugger;
+        this.session.user = user_id = user.id;
+
+        // save user name creation
+        eid = yield models.Identity.create({
+            uid: this.session.uid
+        });
+
+        // redirect to email verification
+        window.location = "/enter_email";
     }
 
     onPasswordChange(password, password_valid) {
@@ -87,13 +95,13 @@ class CreateAccount extends React.Component {
     }
 
     render() {
-        if (!process.env.BROWSER) { // don't render this page on the server
-            return <div className="row">
-                <div className="column">
-                    Loading..
-                </div>
-            </div>;
-        }
+        // if (!process.env.BROWSER) { // don't render this page on the server
+        //     return <div className="row">
+        //         <div className="column">
+        //             Loading..
+        //         </div>
+        //     </div>;
+        // }
 
         const {
             name, password_valid, //showPasswordString,
@@ -101,7 +109,6 @@ class CreateAccount extends React.Component {
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
-        debugger;
         const submit_btn_disabled = loading || !name || name_error;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
@@ -193,7 +200,7 @@ class CreateAccount extends React.Component {
                                 </div>
                             </noscript>
                             {loading && <LoadingIndicator type="circle" />}
-                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Create Account" />
+                            <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class} value="Continue" />
                         </form>
                     </div>
                 </div>

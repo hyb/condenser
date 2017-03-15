@@ -97,10 +97,6 @@ export default function useEnterAndConfirmEmailPages(app) {
         const body = renderToString(
             <div className="App">
                 <MiniHeader />
-                <SignupProgressBar
-                    steps={["email", "steem account", "phone"]}
-                    current={1}
-                />
                 <br />
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
