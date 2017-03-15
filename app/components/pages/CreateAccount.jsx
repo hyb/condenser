@@ -51,58 +51,6 @@ class CreateAccount extends React.Component {
 
         // redirect to phone verification
         window.location = "/enter_mobile";
-
-        let public_keys;
-        // try {
-        //     const pk = PrivateKey.fromWif(password);
-        //     public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
-        // } catch (error) {
-        //     public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
-        //         const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
-        //         return pk.toPublicKey().toString();
-        //     });
-        // }
-        //
-        // // createAccount
-        // fetch('/api/v1/accounts', {
-        //     method: 'post',
-        //     mode: 'no-cors',
-        //     credentials: 'same-origin',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         csrf: $STM_csrf,
-        //         name,
-        //         owner_key: public_keys[0],
-        //         active_key: public_keys[1],
-        //         posting_key: public_keys[2],
-        //         memo_key: public_keys[3]
-        //     })
-        // }).then(r => r.json()).then(res => {
-        //     if (res.error || res.status !== 'ok') {
-        //         console.error('CreateAccount server error', res.error);
-        //         if (res.error === 'Unauthorized') {
-        //             window.location = '/enter_email';
-        //         }
-        //         this.setState({server_error: res.error || 'Unknown', loading: false});
-        //     } else {
-        //         window.location = `/login.html#account=${name}&msg=accountcreated`;
-        //         // this.props.loginUser(name, password);
-        //         // const redirect_page = localStorage.getItem('redirect');
-        //         // if (redirect_page) {
-        //         //     localStorage.removeItem('redirect');
-        //         //     browserHistory.push(redirect_page);
-        //         // }
-        //         // else {
-        //         //     browserHistory.push('/@' + name);
-        //         // }
-        //     }
-        // }).catch(error => {
-        //     console.error('Caught CreateAccount server error', error);
-        //     this.setState({server_error: (error.message ? error.message : error), loading: false});
-        // });
     }
 
     onPasswordChange(password, password_valid) {
@@ -153,9 +101,8 @@ class CreateAccount extends React.Component {
         } = this.state;
 
         const {loggedIn, logout, offchainUser, serverBusy} = this.props;
-        const submit_btn_disabled =
-            loading || !name || !password_valid ||
-            name_error;
+        debugger;
+        const submit_btn_disabled = loading || !name || name_error;
         const submit_btn_class = 'button action' + (submit_btn_disabled ? ' disabled' : '');
 
         if (serverBusy || $STM_Config.disable_signups) {
@@ -179,9 +126,9 @@ class CreateAccount extends React.Component {
                 </div>
             </div>;
         }
-        if (!offchainUser) {
-            return <SignUp />;
-        }
+        // if (!offchainUser) {
+        //     return <SignUp />;
+        // }
 
         if (loggedIn) {
             return <div className="row">
@@ -194,19 +141,19 @@ class CreateAccount extends React.Component {
             </div>;
         }
 
-        const existingUserAccount = offchainUser.get('account');
-        if (existingUserAccount) {
-            return <div className="row">
-                <div className="column">
-                    <div className="callout alert">
-                        <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
-                        <p>In order to prevent abuse Steemit can only register one account per verified user.</p>
-                        <p>You can either <a href="/login.html">login</a> to your existing account
-                            or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
-                    </div>
-                </div>
-            </div>;
-        }
+        // const existingUserAccount = offchainUser.get('account');
+        // if (existingUserAccount) {
+        //     return <div className="row">
+        //         <div className="column">
+        //             <div className="callout alert">
+        //                 <p>Our records indicate that you already have steem account: <strong>{existingUserAccount}</strong></p>
+        //                 <p>In order to prevent abuse Steemit can only register one account per verified user.</p>
+        //                 <p>You can either <a href="/login.html">login</a> to your existing account
+        //                     or <a href="mailto:support@steemit.com">send us email</a> if you need a new account.</p>
+        //             </div>
+        //         </div>
+        //     </div>;
+        // }
 
         let next_step = null;
         if (server_error) {
@@ -228,30 +175,9 @@ class CreateAccount extends React.Component {
 
         return (
             <div>
-                <SignupProgressBar steps={['email', 'steem account', 'phone']} current={3} />
                 <div className="CreateAccount row">
                     <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
                         <br />
-                        {showRules ? <div className="CreateAccount__rules">
-                            <p>
-                                The first rule of Steemit is: Do not lose your password.<br />
-                                The second rule of Steemit is: Do <strong>not</strong> lose your password.<br />
-                                The third rule of Steemit is: We cannot recover your password.<br />
-                                The fourth rule: If you can remember the password, it&apos;s not secure.<br />
-                                The fifth rule: Use only randomly-generated passwords.<br />
-                                The sixth rule: Do not tell anyone your password.<br />
-                                The seventh rule: Always back up your password.
-                            </p>
-                            <div className="text-center">
-                                <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: false})}>
-                                    <span style={{display: 'inline-block', transform: 'rotate(-90deg)'}}>&raquo;</span>
-                                </a>
-                            </div>
-                            <hr />
-                        </div> : <div className="text-center">
-                            <a className="CreateAccount__rules-button" href="#" onClick={() => this.setState({showRules: true})}>Steemit
-                                Rules &nbsp; &raquo;</a>
-                        </div>}
                         <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
                             <div className={name_error ? 'error' : ''}>
                                 <label>ACCOUNT NAME
@@ -259,7 +185,6 @@ class CreateAccount extends React.Component {
                                 </label>
                                 <p>{name_error}</p>
                             </div>
-                            <GeneratedPasswordInput onChange={this.onPasswordChange} disabled={loading} showPasswordString={name.length > 0 && !name_error} />
                             <br />
                             {next_step && <div>{next_step}<br /></div>}
                             <noscript>
