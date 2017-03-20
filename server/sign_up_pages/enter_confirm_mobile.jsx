@@ -117,15 +117,22 @@ export default function useEnterAndConfirmMobilePages(app) {
             this.session.uid,
             this.session.user
         );
-        const user_id = this.session.user;
-        if (!user_id) {
-            this.body = "user not found";
-            return;
-        }
+        // const user_id = this.session.user;
+        // if (!user_id) {
+        //     this.body = "user not found";
+        //     return;
+        // }
+        // const mid = yield models.Identity.findOne({
+        //     attributes: ["phone"],
+        //     where: { user_id, provider: "phone" },
+        //     order: "id DESC"
+        // });
+        let user;
+        user = yield models.User.findOne({
+            where: { uid: this.session.uid }
+        });
         const mid = yield models.Identity.findOne({
-            attributes: ["phone"],
-            where: { user_id, provider: "phone" },
-            order: "id DESC"
+            where: { user_id: user.id }
         });
         if (mid && mid.verified) {
             this.flash = { success: "Phone number has already been verified" };

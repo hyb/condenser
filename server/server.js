@@ -15,8 +15,9 @@ import useOauthLogin from './api/oauth';
 import useGeneralApi from './api/general';
 import useAccountRecoveryApi from './api/account_recovery';
 import useNotificationsApi from './api/notifications';
-import useEnterAndConfirmEmailPages from './server_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './server_pages/enter_confirm_mobile';
+import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
+import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
+import useEnterUserNamePages from './sign_up_pages/enter_user_name';
 import useUserJson from './json/user_json';
 import usePostJson from './json/post_json';
 import isBot from 'koa-isbot';
@@ -91,11 +92,11 @@ app.use(function*(next) {
         }
     }
     // start registration process if user get to create_account page and has no id in session yet
-    if (this.url === '/create_account' && !this.session.user) {
-        this.status = 302;
-        this.redirect('/enter_email');
-        return;
-    }
+    // if (this.url === '/create_account' && !this.session.user) {
+    //     this.status = 302;
+    //     this.redirect('/enter_email');
+    //     return;
+    // }
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
         let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
@@ -175,6 +176,7 @@ app.use(function*(next) {
 });
 
 useRedirects(app);
+useEnterUserNamePages(app);
 useEnterAndConfirmEmailPages(app);
 useEnterAndConfirmMobilePages(app);
 useUserJson(app);

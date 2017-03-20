@@ -243,19 +243,19 @@ export default function useEnterAndConfirmEmailPages(app) {
         } else {
             let user;
             let eid;
-            console.log(this.session.uid)
             user = yield models.User.findOne({
-                attributes: ["uid"],
-                where: { uid: this.session.uid },
-                order: "id DESC"
+                where: { uid: this.session.uid }
             });
-            console.log("here's the user", user.id);
             eid = yield models.Identity.findOne({
                 attributes: ["id"],
                 where: { user_id: user.id },
                 order: "id DESC"
             });
             yield eid.update({ email: this.request.body.email });
+
+            // redirect to phone verification
+            this.redirect("/enter_mobile");
+            return;
 
             // we should always have a user at this point
             // if (!user) {
