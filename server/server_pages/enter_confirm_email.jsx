@@ -242,48 +242,59 @@ export default function useEnterAndConfirmEmailPages(app) {
             sendEmail("confirm_email", email, { confirmation_code });
         } else {
             let user;
-            if (user_id) {
-                user = yield models.User.findOne({
-                    attributes: ["id"],
-                    where: { id: user_id }
-                });
-            }
-            if (!user) {
-                user = yield models.User.create({
-                    uid: this.session.uid,
-                    remote_ip: getRemoteIp(this.request.req)
-                });
-                this.session.user = user_id = user.id;
-            }
-
-            const confirmation_code = secureRandom
-                .randomBuffer(13)
-                .toString("hex");
-            let eid = yield models.Identity.findOne({
-                attributes: ["id", "email"],
-                where: { user_id, provider: "email" },
+            let eid;
+            console.log(this.session.uid)
+            user = yield models.User.findOne({
+                attributes: ["uid"],
+                where: { uid: this.session.uid },
                 order: "id DESC"
             });
-            if (eid) {
-                yield eid.update({ confirmation_code, email });
-            } else {
-                eid = yield models.Identity.create({
-                    provider: "email",
-                    user_id,
-                    uid: this.session.uid,
-                    email,
-                    verified: false,
-                    confirmation_code
-                });
-            }
-            console.log(
-                "-- /submit_email -->",
-                this.session.uid,
-                this.session.user,
-                email,
-                eid.id
-            );
-            sendEmail("confirm_email", email, { confirmation_code });
+            console.log("here's the user", user.id);
+            eid = yield models.Identity.findOne({
+                attributes: ["id"],
+                where: { user_id: user.id },
+                order: "id DESC"
+            });
+            yield eid.update({ email: this.request.body.email });
+
+            // we should always have a user at this point
+            // if (!user) {
+            //     user = yield models.User.create({
+            //         uid: this.session.uid,
+            //         remote_ip: getRemoteIp(this.request.req)
+            //     });
+            //     this.session.user = user_id = user.id;
+            // }
+
+            // const confirmation_code = secureRandom
+            //     .randomBuffer(13)
+            //     .toString("hex");
+            // let eid = yield models.Identity.findOne({
+            //     attributes: ["id", "email"],
+            //     where: { user_id, provider: "email" },
+            //     order: "id DESC"
+            // });
+            // if (eid) {
+            //     yield eid.update({ confirmation_code, email });
+            // } else {
+            //     eid = yield models.Identity.create({
+            //         provider: "email",
+            //         user_id,
+            //         uid: this.session.uid,
+            //         email,
+            //         verified: false,
+            //         confirmation_code
+            //     });
+            // }
+            // console.log(eid)
+            // console.log(
+            //     "-- /submit_email -->",
+            //     this.session.uid,
+            //     this.session.user,
+            //     email,
+            //     eid.id
+            // );
+            // sendEmail("confirm_email", email, { confirmation_code });
         }
         const body = renderToString(
             <div className="App">
