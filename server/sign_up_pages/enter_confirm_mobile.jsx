@@ -156,14 +156,16 @@ export default function useEnterAndConfirmMobilePages(app) {
                         action="/submit_mobile"
                         method="POST"
                     >
-                        <h4>
-                            Please provide your phone number to continue the registration process
+                        <h4 style={{ color: "#4078c0" }}>
+                            Please provide your phone number to receive your initial free steem deposit.
                         </h4>
                         <div className="secondary">
-                            Phone verification helps with preventing spam and allows Steemit to assist with Account Recovery in case your account is ever compromised.
+                            Phone verification helps with preventing spam, allows Steemit to assist with Account Recovery in case your account is ever compromised, and for your initial
+                            steem deposit.
 
-
-                            Your phone number will not be used for any other purpose other than phone verification and account recovery.
+                            <br />
+                            <br />
+                            <em>Your phone number will not be used for any other purpose other than phone verification and account recovery.</em>
                         </div>
                         <br />
                         <input type="hidden" name="csrf" value={this.csrf} />

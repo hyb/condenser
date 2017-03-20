@@ -101,7 +101,7 @@ export default function useEnterAndConfirmEmailPages(app) {
                 <div className="row" style={{ maxWidth: "32rem" }}>
                     <div className="column">
                         <form action="/submit_email" method="POST">
-                            <h4>
+                            <h4 style={{ color: "#4078c0" }}>
                                 Please provide your email address to continue the registration process
                             </h4>
                             <p className="secondary">
@@ -123,11 +123,11 @@ export default function useEnterAndConfirmEmailPages(app) {
                                 />
                             </label>
                             <br />
-                            <div
-                                className="g-recaptcha"
-                                data-sitekey={rc_site_key}
-                            />
-                            <br />
+                            {/*<div*/}
+                                {/*className="g-recaptcha"*/}
+                                {/*data-sitekey={rc_site_key}*/}
+                            {/*/>*/}
+                            {/*<br />*/}
                             <div className="error">
                                 {this.flash.error}
                             </div>
@@ -251,7 +251,10 @@ export default function useEnterAndConfirmEmailPages(app) {
                 where: { user_id: user.id },
                 order: "id DESC"
             });
-            yield eid.update({ email: this.request.body.email });
+            yield eid.update({
+                email: this.request.body.email,
+                last_step: 2
+            });
 
             // redirect to phone verification
             this.redirect("/enter_mobile");

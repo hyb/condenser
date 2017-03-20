@@ -158,8 +158,10 @@ export default function useEnterUserNamePages(app) {
                 <div>
                     <div className="CreateAccount row">
                         <div className="column" style={{maxWidth: '36rem', margin: '0 auto'}}>
-                            <br />
                             <form action="/submit_account" method="POST" autoComplete="off">
+                                <h4 style={{ color: "#4078c0" }}>
+                                    Please pick your new steemit username.
+                                </h4>
                                 <div className={name_error ? 'error' : ''}>
                                     <label>ACCOUNT NAME
                                         <input type="text" name="name" autoComplete="off" onChange={this.nameChange} value={name} />
